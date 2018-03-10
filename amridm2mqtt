@@ -85,15 +85,18 @@ while True:
         if interval_cur != interval_last:
 
             # as observed on on my meter...
+            # using values set in settings...
             # each idm interval is 5 minutes (12x per hour),
             # measured in hundredths of a kilowatt hour
             # take the last interval usage times 10 to get watt-hours,
             # then times 12 to get average usage in watts
-            rate = idm_read_cur * 10 * 12
+            rate = idm_read_cur * settings.WH_MULTIPLIER * settings.READINGS_PER_HOUR
+
+            current_reading_in_kwh = (read_cur * settings.WH_MULTIPLIER) / 1000
 
             send_mqtt(
                 'readings/' + str(meter_id) + '/meter_reading',
-                '%s' % (read_cur)
+                '%s' % (current_reading_in_kwh)
             )
 
             send_mqtt(

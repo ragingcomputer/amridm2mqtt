@@ -4,6 +4,26 @@
 # or multiple entries - [12345678, 98765432, 12340123]
 WATCHED_METERS = []
 
+# multiplier to get reading to Watt Hours (Wh)
+# examples:
+#   for meter providing readings in kWh
+#      MULTIPLIER = 1000
+#   for meter providing readings in kWh
+#   with 2 extra digits of precision
+#      MULTIPLIER = 10
+# MULTIPLIER needs to be a number
+WH_MULTIPLIER = 1000
+
+# number of IDM intervals per hour reported by the meter
+# examples:
+#   for meter providing readings every 5 minutes
+#   or 12 times every hour
+#     READINGS_PER_HOUR = 12
+#   for meter providing readings every 15 minutes
+#   or 12 times every hour
+#     READINGS_PER_HOUR = 4
+READINGS_PER_HOUR = 12
+
 # MQTT Server settings
 # MQTT_HOST needs to be a string
 # MQTT_PORT needs to be an int

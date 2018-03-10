@@ -116,7 +116,7 @@ sensor:
   - platform: mqtt
     state_topic: "readings/12345678/meter_rate"
     name: "Power Meter Avg Usage 5 mins"
-    unit_of_measurement: Wh
+    unit_of_measurement: W
   ```
 
 ## Testing
