@@ -98,3 +98,31 @@ Refresh systemd configuration
 Start amridm2mqtt service
 
 `sudo service amridm2mqtt start`
+
+Set amridm2mqtt to run on startup
+
+`sudo systemctl enable amridm2mqtt.service`
+
+### Configure Home Assistant
+
+To use these values in Home Assistant,
+```
+sensor:
+  - platform: mqtt
+    state_topic: "readings/12345678/meter_reading"
+    name: "Power Meter"
+
+  - platform: mqtt
+    state_topic: "readings/12345678/meter_rate"
+    name: "Power Meter Avg Usage 5 mins"
+  ```
+
+## Testing
+
+Assuming you're using mosquitto as the server, and your meter's id is 12345678, you can watch for events using the command:
+
+`mosquitto_sub -t "readings/12345678/meter_reading"`
+
+Or if you've password protected mosquitto
+
+`mosquitto_sub -t "readings/12345678/meter_reading" -u <user_name> -P <password>`

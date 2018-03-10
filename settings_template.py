@@ -7,8 +7,13 @@ WATCHED_METERS = []
 # MQTT Server settings
 # MQTT_HOST needs to be a string
 # MQTT_PORT needs to be an int
+# MQTT_USER needs to be a string
+# MQTT_PASSWORD needs to be a string
+# If no authentication, leave MQTT_USER and MQTT_PASSWORD empty
 MQTT_HOST = '127.0.0.1'
 MQTT_PORT = 1883
+MQTT_USER = ''
+MQTT_PASSWORD = ''
 
 # path to rtlamr
 RTLAMR = '/usr/local/bin/rtlamr'

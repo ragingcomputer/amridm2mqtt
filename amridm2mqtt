@@ -29,6 +29,11 @@ signal.signal(signal.SIGINT, shutdown)
 # stores last interval id to avoid duplication, includes getter and setter
 last_reading = {}
 
+auth = None
+
+if len(settings.MQTT_USER) and len(settings.MQTT_PASSWORD):
+	auth = {'username':settings.MQTT_USER, 'password':settings.MQTT_PASSWORD}
+
 def get_last_interval(meter_id):
     return last_reading.get(meter_id, (None))
 
@@ -38,7 +43,7 @@ def set_last_interval(meter_id, interval_ID):
 # send data to MQTT broker defined in settings
 def send_mqtt(topic, payload,):
     try:
-        publish.single(topic, payload=payload, qos=1, hostname=settings.MQTT_HOST, port=settings.MQTT_PORT)
+        publish.single(topic, payload=payload, qos=1, hostname=settings.MQTT_HOST, port=settings.MQTT_PORT, auth=auth)
     except Exception as ex:
         print("MQTT Publish Failed: " + str(ex))
 
