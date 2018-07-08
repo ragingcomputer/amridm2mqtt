@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 '''
 Runs rtlamr to watch for IDM broadcasts from power meter. If meter id
 is in the list, usage is sent to 'readings/{meter id}/meter_reading'
