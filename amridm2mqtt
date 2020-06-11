@@ -9,6 +9,7 @@ MQTT_HOST = String containing the MQTT server address.
 MQTT_PORT = An int containing the port the MQTT server is active on.
 
 '''
+import os
 import subprocess
 import signal
 import sys
@@ -18,9 +19,11 @@ import settings
 
 # uses signal to shutdown and hard kill opened processes and self
 def shutdown(signum, frame):
-    subprocess.call('/usr/bin/pkill -9 rtlamr', shell=True)
-    subprocess.call('/usr/bin/pkill -9 rtl_tcp', shell=True)
-    subprocess.call('/usr/bin/pkill -9 amridm2mqtt', shell=True)
+    rtltcp.send_signal(15)
+    rtlamr.send_signal(15)
+    time.sleep(1)
+    rtltcp.send_signal(9)
+    rtlamr.send_signal(9)
     sys.exit(0)
 
 signal.signal(signal.SIGTERM, shutdown)
@@ -33,6 +36,12 @@ auth = None
 
 if len(settings.MQTT_USER) and len(settings.MQTT_PASSWORD):
 	auth = {'username':settings.MQTT_USER, 'password':settings.MQTT_PASSWORD}
+
+DEBUG=os.environ.get('DEBUG', '').lower() in ['1', 'true', 't']
+
+def debug_print(*args, **kwargs):
+    if DEBUG:
+        print(*args, **kwargs)
 
 def get_last_interval(meter_id):
     return last_reading.get(meter_id, (None))
@@ -53,16 +62,12 @@ rtltcp = subprocess.Popen([settings.RTL_TCP + " > /dev/null 2>&1 &"], shell=True
 time.sleep(5)
 
 # start the rtlamr program.
-rtlamr = subprocess.Popen([settings.RTLAMR,
-    '-msgtype=idm',
-    '-format=csv'], stdout=subprocess.PIPE)
+rtlamr_cmd = [settings.RTLAMR, '-msgtype=idm', '-format=csv']
+rtlamr = subprocess.Popen(rtlamr_cmd, stdout=subprocess.PIPE, universal_newlines=True)
 
 while True:
-
     try:
-        # rtlamr's readline returns byte list, remove whitespace and convert to string
-        amrline = rtlamr.stdout.readline().strip().decode()
-        # split string on commas
+        amrline = rtlamr.stdout.readline().strip()
         flds = amrline.split(',')
 
         if len(flds) != 66:
@@ -71,7 +76,7 @@ while True:
 
         # make sure the meter id is one we want
         meter_id = int(flds[9])
-        if len(settings.WATCHED_METERS) and meter_id not in settings.WATCHED_METERS:
+        if settings.WATCHED_METERS and meter_id not in settings.WATCHED_METERS:
             continue
 
         # get some required info: current meter reading, current interval id, most recent interval usage
@@ -94,18 +99,15 @@ while True:
 
             current_reading_in_kwh = (read_cur * settings.WH_MULTIPLIER) / 1000
 
-            send_mqtt(
-                'readings/' + str(meter_id) + '/meter_reading',
-                '%s' % (current_reading_in_kwh)
-            )
+            debug_print('Sending meter {} reading: {}'.format(meter_id, current_reading_in_kwh))
+            send_mqtt('readings/{}/meter_reading'.format(meter_id), str(current_reading_in_kwh))
 
-            send_mqtt(
-                'readings/' + str(meter_id) + '/meter_rate',
-                '%s' % (rate)
-            )
+            debug_print('Sending meter {} rate: {}'.format(meter_id, rate))
+            send_mqtt('readings/{}/meter_rate'.format(meter_id), str(rate))
 
             # store interval ID to avoid duplicating data
             set_last_interval(meter_id, interval_cur)
 
-    except:
+    except Exception as e:
+        debug_print('Exception squashed! {}: {}', e.__class__.__name__, e)
         time.sleep(2)
