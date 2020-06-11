@@ -7,6 +7,10 @@ Using an [inexpensive rtl-sdr dongle](https://www.amazon.com/s/ref=nb_sb_noss?fi
 TODO: Video for Home Assistant
 
 
+## Docker
+
+If you use Docker and would rather launch this under a container see <README.Docker.md>.
+
 ## Requirements
 
 Tested under Raspbian GNU/Linux 9.3 (stretch)
