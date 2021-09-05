@@ -116,6 +116,10 @@ sensor:
     state_topic: "readings/12345678/meter_reading"
     name: "Power Meter"
     unit_of_measurement: kWh
+    last_reset_topic: "readings/57571780/meter_reading"
+    last_reset_value_template: 1970-01-01T00:00:00+00:00
+    state_class: total_increasing
+    device_class: energy
 
   - platform: mqtt
     state_topic: "readings/12345678/meter_rate"
