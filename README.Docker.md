@@ -1,4 +1,4 @@
-# Using amirdm2mqtt in Docker.
+# Using amridm2mqtt in Docker.
 
 If you want to run this under Docker you can do so. A Dockerfile has been provided so you can build your own container.
 
@@ -6,7 +6,7 @@ If you want to run this under Docker you can do so. A Dockerfile has been provid
 
 Building should be a simple matter:
 
-    docker build -t amirdm2mqtt .
+    docker build -t amridm2mqtt .
 
 ## Configuration
 
@@ -33,7 +33,7 @@ You may also need to give it access to the network for your mqtt server. If you 
     docker network create --attachable mqtt
     docker network connect mqtt <mosquitto_container>
 
-A comman `docker run` command incorporating the above advice along with a common configuration is provided as an example:
+A common `docker run` command incorporating the above advice along with a common configuration is provided as an example:
 
     docker run -it --name amridm2mqtt \
         --restart=unless-stopped \
