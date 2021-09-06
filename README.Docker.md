@@ -13,7 +13,7 @@ Building should be a simple matter:
 All configuration for the docker container is handled through environment variables. You can pass these to `docker run` using the -e flag. At a minimum you need to set `WATCHED_METERS`.
 
 | Environment Variable | Default | Required | Description |
-|----------------------|----------|-------------|
+|----------------------|---------|----------|-------------|
 | WATCHED_METERS | | Yes | A comma or space separated list of meters to watch |
 | WH_MULTIPLIER | 1000 | No | multiplier to get reading to Watt Hours (Wh) |
 | READINGS_PER_HOUR | 12 | No | number of IDM intervals per hour reported by the meter |
