@@ -1,4 +1,4 @@
-# Using amirdm2mqtt in Docker
+# Using amridm2mqtt in Docker
 
 If you want to run this under Docker you can do so. A Dockerfile has been provided so you can build your own container.
 
@@ -7,7 +7,7 @@ If you want to run this under Docker you can do so. A Dockerfile has been provid
 Building should be a simple matter:
 
 ```shell
-docker build -t amirdm2mqtt .
+docker build -t amridm2mqtt .
 ```
 
 ## Configuration
