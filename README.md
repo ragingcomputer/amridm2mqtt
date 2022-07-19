@@ -1,11 +1,10 @@
 # AMRIDM2MQTT: Send AMR/ERT Power Meter Data Over MQTT
 
-##### Copyright (c) 2018 Ben Johnson. Distributed under MIT License.
+## Copyright (c) 2018 Ben Johnson. Distributed under MIT License
 
 Using an [inexpensive rtl-sdr dongle](https://www.amazon.com/s/ref=nb_sb_noss?field-keywords=RTL2832U), it's possible to listen for signals from ERT compatible smart meters using rtlamr. This script runs as a daemon, launches rtl_tcp and rtlamr, and parses the output from rtlamr. If this matches your meter, it will push the data into MQTT for consumption by Home Assistant, OpenHAB, or custom scripts.
 
 TODO: Video for Home Assistant
-
 
 ## Docker
 
@@ -53,14 +52,13 @@ Install Go programming language & set gopath
 
 `sudo apt-get install golang`
 
-https://github.com/golang/go/wiki/SettingGOPATH
+<https://github.com/golang/go/wiki/SettingGOPATH>
 
 If only running go to get rtlamr, just set environment temporarily with the following command
 
 `export GOPATH=$HOME/go`
 
-
-Install rtlamr https://github.com/bemasher/rtlamr
+Install rtlamr <https://github.com/bemasher/rtlamr>
 
 `go get github.com/bemasher/rtlamr`
 
@@ -71,6 +69,7 @@ To make things convenient, I'm copying rtlamr to /usr/local/bin
 ## Install
 
 ### Clone Repo
+
 Clone repo into opt
 
 `cd /opt`
@@ -110,7 +109,8 @@ Set amridm2mqtt to run on startup
 ### Configure Home Assistant
 
 To use these values in Home Assistant,
-```
+
+```yaml
 sensor:
   - platform: mqtt
     state_topic: "readings/12345678/meter_reading"
@@ -121,7 +121,7 @@ sensor:
     state_topic: "readings/12345678/meter_rate"
     name: "Power Meter Avg Usage 5 mins"
     unit_of_measurement: W
-  ```
+```
 
 ## Testing
 
