@@ -146,18 +146,16 @@ if __name__ == "__main__":
             debug_print(amrline)
 
             # Try to determine message type based on the number of fields
-            match len(flds):
-                case messagetypes.IDM_FIELDS:
-                    debug_print(
-                        "Number of fields suggests message type idm, parsing...")
-                    parse_idm(flds)
-                case messagetypes.SCM_FIELDS:
-                    debug_print(
-                        "Number of fields suggests message type idm, parsing...")
-                    parse_scm(flds)
-                case _:
-                    debug_print("Unsupported number of fields: ", len(flds))
-                    continue
+            field_count = len(flds)
+            if field_count == messagetypes.IDM_FIELDS:
+                debug_print("Number of fields suggests message type idm, parsing...")
+                parse_idm(flds)
+            elif field_count == messagetypes.SCM_FIELDS:
+                debug_print("Number of fields suggests message type idm, parsing...")
+                parse_scm(flds)
+            else:
+                debug_print("Unsupported number of fields: ", field_count)
+                continue
 
         except Exception as e:
             debug_print('Exception squashed! {}: {}', e.__class__.__name__, e)
