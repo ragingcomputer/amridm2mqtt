@@ -13,6 +13,7 @@ RUN apt update && \
         rtl-sdr && \
     rm -rf /var/lib/apt/lists/*
 RUN go get github.com/bemasher/rtlamr
+RUN python3 -V
 
 # Copy files into place
 COPY * /amridm2mqtt/
