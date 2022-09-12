@@ -116,8 +116,6 @@ mqtt:
     - name: "Power Meter"
       state_topic: "readings/12345678/meter_reading"
       unit_of_measurement: kWh
-
-  sensor:
     - name: "Power Meter Avg Usage 5 mins"
       state_topic: "readings/12345678/meter_rate"
       unit_of_measurement: W
