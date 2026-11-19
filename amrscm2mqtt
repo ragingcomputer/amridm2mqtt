@@ -9,6 +9,7 @@ MQTT_HOST = String containing the MQTT server address.
 MQTT_PORT = An int containing the port the MQTT server is active on.
 
 '''
+import json
 import os
 import subprocess
 import signal
@@ -56,26 +57,32 @@ time.sleep(5)
 
 # Start rtlamr
 print("Starting rtlamr...")
-rtlamr_cmd = [settings.RTLAMR, '-msgtype=scm', '-format=csv']
+rtlamr_cmd = [settings.RTLAMR, f'-msgtype={settings.RTLAMR_MSGTYPE}', '-format=json']
 rtlamr = subprocess.Popen(rtlamr_cmd, stdout=subprocess.PIPE, universal_newlines=True)
 print("rtlamr startup complete")
 
 while True:
     try:
         amrline = rtlamr.stdout.readline().strip()
-        flds = amrline.split(',')
+        if not amrline:
+            continue
 
-        # Proper SCM results have 9 fields
-        if len(flds) != 9:
+        data = json.loads(amrline)
+        message = data.get('Message', {})
+
+        meter_id = message.get('ID') if 'ID' in message else message.get('EndpointID')
+        current_meter_reading = message.get('Consumption')
+
+        if meter_id is None or current_meter_reading is None:
             continue
 
         # Make sure the meter id is one we want
-        meter_id = int(flds[3])
+        meter_id = int(meter_id)
         if settings.WATCHED_METERS and meter_id not in settings.WATCHED_METERS:
             continue
 
         # Extract current meter reading
-        current_meter_reading = int(flds[7])
+        current_meter_reading = int(current_meter_reading)
 
         debug_print(f"Sending meter {meter_id} reading: {current_meter_reading}")
         send_mqtt(f"readings/{meter_id}/meter_reading", str(current_meter_reading))
