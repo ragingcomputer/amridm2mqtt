@@ -19,6 +19,7 @@ MQTT_PASSWORD = os.getenv('MQTT_PASS', '')
 
 # RTLAMR settings
 RTLAMR = os.getenv('RTLAMR', '/amrscm2mqtt/go/bin/rtlamr')
+RTLAMR_MSGTYPE = os.getenv('RTLAMR_MSGTYPE', 'all')
 
 # RTL TCP settings
 RTL_TCP = os.getenv('RTL_TCP', '/usr/bin/rtl_tcp')
