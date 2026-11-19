@@ -71,7 +71,7 @@ while True:
         message = data.get('Message', {})
 
         meter_id = message.get('ID') if 'ID' in message else message.get('EndpointID')
-        current_meter_reading = message.get('Consumption')
+        current_meter_reading = message.get('Consumption') if 'Consumption' in message else message.get('LastConsumptionCount')
 
         if meter_id is None or current_meter_reading is None:
             continue
